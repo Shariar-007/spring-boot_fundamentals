@@ -55,11 +55,23 @@ public class Student {
     )
     private String email;
 
-    @Column(name = "age",updatable = false)
+    @Column(name = "age", nullable = false)
     private Integer age;
 
     public Student() {
     }
+    public Student(Long id,
+                   String firstName,
+                   String lastName,
+                   String email,
+                   Integer age) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.age = age;
+    }
+
     public Student(String firstName,
                    String lastName,
                    String email,
@@ -68,10 +80,6 @@ public class Student {
         this.lastName = lastName;
         this.email = email;
         this.age = age;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getFirstName() {
