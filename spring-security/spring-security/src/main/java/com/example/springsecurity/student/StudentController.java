@@ -14,7 +14,8 @@ import java.util.List;
 public class StudentController {
     private static final List<Student> STUDENTS = Arrays.asList(
             new Student(1,"James Bond"),
-            new Student(2,"Maria Jones")
+            new Student(2,"Maria Jones"),
+            new Student(3,"Anna Smith")
     );
 
 
@@ -22,5 +23,10 @@ public class StudentController {
     public Student getStudent(@PathVariable("studentId") Integer studentId){
         return STUDENTS.stream().filter(student -> student.getStudentId().equals(studentId)).findFirst()
                 .orElseThrow(() -> new IllegalStateException("Student " + studentId + " does not exists"));
+    }
+
+    @GetMapping
+    public List<Student> getStudents(){
+        return STUDENTS;
     }
 }

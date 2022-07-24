@@ -12,8 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static com.example.springsecurity.security.ApplicationUserRole.ADMIN;
-import static com.example.springsecurity.security.ApplicationUserRole.STUDENT;
+import static com.example.springsecurity.security.ApplicationUserRole.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -33,6 +32,7 @@ public class ApplicationSecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/","/js/*","/css/*","index")
                         .permitAll()
+                        .antMatchers("/api/**").hasRole(STUDENT.name())
                         .anyRequest()
                         .authenticated()
                 )
@@ -50,10 +50,17 @@ public class ApplicationSecurityConfig {
 
         UserDetails linda = User.builder()
                 .username("linda")
-                .password(passwordEncoder.encode("password"))
+                .password(passwordEncoder.encode("password123"))
                 .roles(ADMIN.name())
                 .build();
-        return new InMemoryUserDetailsManager(anaSmithUser, linda);
+
+        UserDetails tom = User.builder()
+                .username("tom")
+                .password(passwordEncoder.encode("password123"))
+                .roles(ADMINTRAINEE.name())
+                .build();
+
+        return new InMemoryUserDetailsManager(anaSmithUser, linda, tom);
     }
 
 
