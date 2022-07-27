@@ -36,8 +36,14 @@ public class EmailController {
     }
 
     @PostMapping
-    public void addEmail(@RequestBody Email email){
+    public void addEmail(@RequestBody Email email) {
         emailService.save(email);
+    }
+
+
+    @DeleteMapping(path = "{emailId}")
+    public void removeEmail(@PathVariable("emailId") Integer emailId) {
+        emailService.delete(emailId);
     }
 
 }

@@ -1,12 +1,28 @@
 package com.example.springsimpledemo;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Email")
 public class Email {
+    @Column
+    @Id
+    @GeneratedValue
+    private Integer id;
+
+    @Column
     private String title;
+
+    @Column
     private String description;
 
     public Email(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    public Email() {
+
     }
 
     public String getTitle() {
@@ -28,7 +44,8 @@ public class Email {
     @Override
     public String toString() {
         return "Email{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }
