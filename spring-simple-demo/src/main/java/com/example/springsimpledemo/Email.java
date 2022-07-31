@@ -1,9 +1,11 @@
 package com.example.springsimpledemo;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Email")
+//@Table(name = "Email")
 public class Email {
     @Column
     @Id
@@ -11,6 +13,7 @@ public class Email {
     private Integer id;
 
     @Column
+    @NotBlank
     private String title;
 
     @Column

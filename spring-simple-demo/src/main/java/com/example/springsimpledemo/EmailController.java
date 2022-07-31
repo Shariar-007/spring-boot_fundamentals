@@ -1,8 +1,10 @@
 package com.example.springsimpledemo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,29 +16,29 @@ public class EmailController {
     private EmailService emailService;
 
 
+//    @GetMapping
+//    public List<Email> getEmails() {
+//        return this.emailService.getEmails();
+//    }
+
     @GetMapping
-    public List<Email> getEmail(@RequestParam(required = false) String title) {
-
+    public ResponseEntity<List<Email>> getEmailByTitle(@RequestParam(required = false) String title) {
         if (title == null) {
-            return emailService.getEmails();
+            return ResponseEntity.ok(emailService.getEmails());
         }
-
         List<Email> foundedMail = new ArrayList<>();
-        Email email = this.emailService.getEmailByTitle(title);
-
+        Email email = emailService.getEmailByTitle(title);
         if (email != null) {
             foundedMail.add(email);
         }
-
         if (foundedMail.isEmpty()) {
             throw new EmailErrorHandle();
         }
-
-        return foundedMail;
+        return ResponseEntity.ok(foundedMail);
     }
 
     @PostMapping
-    public void addEmail(@RequestBody Email email) {
+    public void addEmail(@Valid @RequestBody Email email) {
         emailService.save(email);
     }
 
