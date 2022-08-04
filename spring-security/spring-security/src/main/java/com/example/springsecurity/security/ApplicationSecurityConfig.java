@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.example.springsecurity.security.ApplicationUserPermission.COURSE_WRITE;
 import static com.example.springsecurity.security.ApplicationUserPermission.STUDENT_WRITE;
@@ -39,22 +42,36 @@ public class ApplicationSecurityConfig {
 //                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //                .and()
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers("/","/js/*","/css/*","index")
-                        .permitAll()
-                        .antMatchers("/api/**").hasRole(STUDENT.name())
+                                .antMatchers("/", "/js/*", "/css/*", "index")
+                                .permitAll()
+                                .antMatchers("/api/**").hasRole(STUDENT.name())
 //                        .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
 //                        .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
 //                        .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
 //                        .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
-                        .anyRequest()
-                        .authenticated()
+                                .anyRequest()
+                                .authenticated()
                 )
 //                .httpBasic(withDefaults());   //in basic authentication we can't logout
                 .formLogin()
-                .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/courses", true)
+                    .loginPage("/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/courses", true)
+                    .passwordParameter("password")
+                    .usernameParameter("username")
                 .and()
-                .rememberMe();
+                .rememberMe()
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+                    .key("somethingverysecured")
+                    .rememberMeParameter("remember-me")
+                .and()
+                .logout()
+                     .logoutUrl("/logout")
+                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                     .clearAuthentication(true)
+                     .invalidateHttpSession(true)
+                     .deleteCookies("JSESSIONID", "remember-me")
+                     .logoutSuccessUrl("/login");
         return http.build();
         //                        .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyAuthority(COURSE_WRITE.name(), STUDENT_WRITE.name())
     }
