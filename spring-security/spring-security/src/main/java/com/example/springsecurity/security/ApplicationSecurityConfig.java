@@ -1,42 +1,39 @@
 package com.example.springsecurity.security;
 
 
+import com.example.springsecurity.auth.ApplicationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.example.springsecurity.security.ApplicationUserPermission.COURSE_WRITE;
-import static com.example.springsecurity.security.ApplicationUserPermission.STUDENT_WRITE;
 import static com.example.springsecurity.security.ApplicationUserRole.*;
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) //dot needed if we use code of 42,43,44,45 lines
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationUserService applicationUserService;
 
     @Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService) {
         this.passwordEncoder = passwordEncoder;
+        this.applicationUserService = applicationUserService;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf().disable()
 //                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -53,53 +50,62 @@ public class ApplicationSecurityConfig {
                                 .authenticated()
                 )
 //                .httpBasic(withDefaults());   //in basic authentication we can't logout
+                .authenticationProvider(daoAuthenticationProvider())
                 .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
-                    .defaultSuccessUrl("/courses", true)
-                    .passwordParameter("password")
-                    .usernameParameter("username")
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/courses", true)
+                .passwordParameter("password")
+                .usernameParameter("username")
                 .and()
                 .rememberMe()
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
-                    .key("somethingverysecured")
-                    .rememberMeParameter("remember-me")
+                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+                .key("somethingverysecured")
+                .rememberMeParameter("remember-me")
                 .and()
                 .logout()
-                     .logoutUrl("/logout")
-                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                     .clearAuthentication(true)
-                     .invalidateHttpSession(true)
-                     .deleteCookies("JSESSIONID", "remember-me")
-                     .logoutSuccessUrl("/login");
+                .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID", "remember-me")
+                .logoutSuccessUrl("/login");
         return http.build();
         //                        .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyAuthority(COURSE_WRITE.name(), STUDENT_WRITE.name())
     }
 
+//    @Bean
+//    protected InMemoryUserDetailsManager userDetailsService() {
+//        UserDetails anaSmithUser = User.builder()
+//                .username("annasmith")
+//                .password(passwordEncoder.encode("password"))
+////                .roles(STUDENT.name())
+//                .authorities(STUDENT.getGrantedAuthorities())
+//                .build();
+//
+//        UserDetails linda = User.builder()
+//                .username("linda")
+//                .password(passwordEncoder.encode("password123"))
+////                .roles(ADMIN.name())
+//                .authorities(ADMIN.getGrantedAuthorities())
+//                .build();
+//
+//        UserDetails tom = User.builder()
+//                .username("tom")
+//                .password(passwordEncoder.encode("password123"))
+////                .roles(ADMINTRAINEE.name())
+//                .authorities(ADMINTRAINEE.getGrantedAuthorities())
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(anaSmithUser, linda, tom);
+//    }
+
     @Bean
-    protected InMemoryUserDetailsManager userDetailsService() {
-        UserDetails anaSmithUser = User.builder()
-                .username("annasmith")
-                .password(passwordEncoder.encode("password"))
-//                .roles(STUDENT.name())
-                .authorities(STUDENT.getGrantedAuthorities())
-                .build();
-
-        UserDetails linda = User.builder()
-                .username("linda")
-                .password(passwordEncoder.encode("password123"))
-//                .roles(ADMIN.name())
-                .authorities(ADMIN.getGrantedAuthorities())
-                .build();
-
-        UserDetails tom = User.builder()
-                .username("tom")
-                .password(passwordEncoder.encode("password123"))
-//                .roles(ADMINTRAINEE.name())
-                .authorities(ADMINTRAINEE.getGrantedAuthorities())
-                .build();
-
-        return new InMemoryUserDetailsManager(anaSmithUser, linda, tom);
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setPasswordEncoder(passwordEncoder);
+        authProvider.setUserDetailsService(applicationUserService);
+        return authProvider;
     }
 
 
