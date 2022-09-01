@@ -1,8 +1,12 @@
 package com.example.springdatajpapostgre;
 
+import com.example.springdatajpapostgre.exceptions.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,28 +22,32 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getAll(){
-        return this.studentService.getAll();
+    public ResponseEntity<List<Student>> getAll(){
+//        throw new ApiRequestException("Oops cannot get all students with custom exception");
+        return new ResponseEntity<>(studentService.getAll(), HttpStatus.OK);
     }
 
+
     @GetMapping(path = "{studentId}")
-    public Optional<Student> getStudentById(@PathVariable("studentId") Long studentId){
-        return this.studentService.getStudentById(studentId);
+    public ResponseEntity<Optional<Student>> getStudentById(@PathVariable("studentId") Long studentId){
+        return new ResponseEntity<>(studentService.getStudentById(studentId), HttpStatus.OK);
     }
 
 
     @PostMapping
-    public void save(@RequestBody Student student){
-        this.studentService.save(student);
+    public ResponseEntity<Student> save(@RequestBody Student student){
+        Student student1 = studentService.save(student);
+        return new ResponseEntity<>(student1, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "{studentId}")
-    public void deletedById(@PathVariable("studentId") Long studentId){
-        this.studentService.deleteById(studentId);
+    public ResponseEntity<?> deletedById(@PathVariable("studentId") Long studentId){
+        studentService.deleteById(studentId);
+       return new ResponseEntity(HttpStatus.OK);
     }
 
     @PutMapping(path = "{studentId}")
-    public Student update(@RequestBody Student student, @PathVariable("studentId") Long studentId){
-        return this.studentService.update(student, studentId);
+    public ResponseEntity<Student> update(@RequestBody Student student, @PathVariable("studentId") Long studentId){
+        return new ResponseEntity<>(studentService.update(student, studentId), HttpStatus.OK);
     }
 }
