@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -78,9 +79,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy, String sortType) {
+        Sort sort = null;
+        if(sortType.equalsIgnoreCase("asc")){
+            sort = Sort.by(sortBy).ascending();
+        } else if (sortType.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortBy).descending();
+        }
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> pagePost = postRepo.findAll(pageable);
 
         List<Post> posts = pagePost.getContent();
@@ -97,10 +104,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getPostsByUserId(Integer userId, Integer pageNumber, Integer pageSize) {
+    public PostResponse getPostsByUserId(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String sortType) {
+        Sort sort = null;
+        if(sortType.equalsIgnoreCase("asc")){
+            sort = Sort.by(sortBy).ascending();
+        } else if (sortType.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortBy).descending();
+        }
+
         User foundedUser = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> pagePost = postRepo.findAllByUser(foundedUser, pageable);
 
         List<Post> posts = pagePost.getContent();
@@ -118,10 +132,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getPostsByCategoryId(Integer categoryId, Integer pageNumber, Integer pageSize) {
+    public PostResponse getPostsByCategoryId(Integer categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortType) {
+        Sort sort = null;
+        if(sortType.equalsIgnoreCase("asc")){
+            sort = Sort.by(sortBy).ascending();
+        } else if (sortType.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortBy).descending();
+        }
+
         Category foundedCategory = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category", "id", categoryId));
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> pagePost = postRepo.findAllByCategory(foundedCategory, pageable);
 
         List<Post> posts = pagePost.getContent();

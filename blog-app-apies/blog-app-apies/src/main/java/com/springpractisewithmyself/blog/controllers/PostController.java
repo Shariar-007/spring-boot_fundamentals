@@ -35,24 +35,30 @@ public class PostController {
 
     @GetMapping("/user/{userId}/posts")
     public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId,
-                                                        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                                        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
-        PostResponse postResponse = postService.getPostsByUserId(userId, pageNumber, pageSize);
+                                                       @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                       @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+                                                       @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+                                                       @RequestParam(value = "sortType", defaultValue = "desc", required = false) String sortType) {
+        PostResponse postResponse = postService.getPostsByUserId(userId, pageNumber, pageSize, sortBy, sortType);
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     @GetMapping("/category/{categoryId}/posts")
     public ResponseEntity<PostResponse> getPostsByCategory(@PathVariable Integer categoryId,
-                                                            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                                            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
-        PostResponse postResponse = postService.getPostsByCategoryId(categoryId, pageNumber, pageSize);
+                                                           @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                           @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+                                                           @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+                                                           @RequestParam(value = "sortType", defaultValue = "desc", required = false) String sortType) {
+        PostResponse postResponse = postService.getPostsByCategoryId(categoryId, pageNumber, pageSize, sortBy, sortType);
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getPosts(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                                 @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
-        PostResponse pagepost = postService.getAllPosts(pageNumber, pageSize);
+                                                 @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+                                                 @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+                                                 @RequestParam(value = "sortType", defaultValue = "desc", required = false) String sortType) {
+        PostResponse pagepost = postService.getAllPosts(pageNumber, pageSize, sortBy, sortType);
         return new ResponseEntity<PostResponse>(pagepost, HttpStatus.OK);
     }
 

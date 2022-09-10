@@ -15,9 +15,9 @@ public interface PostService {
 
     public PostDao getPostById(Integer postId);
 
-    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy, String sortType);
 
-    public PostResponse getPostsByUserId(Integer userId, Integer pageNumber, Integer pageSize);
+    public PostResponse getPostsByUserId(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String sortType);
 
-    public PostResponse getPostsByCategoryId(Integer categoryId, Integer pageNumber, Integer pageSize);
+    public PostResponse getPostsByCategoryId(Integer categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortType);
 }
