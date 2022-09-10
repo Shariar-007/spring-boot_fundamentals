@@ -5,6 +5,7 @@ import com.springpractisewithmyself.blog.entities.Post;
 import com.springpractisewithmyself.blog.entities.User;
 import com.springpractisewithmyself.blog.exceptions.ResourceNotFoundException;
 import com.springpractisewithmyself.blog.payloads.PostDao;
+import com.springpractisewithmyself.blog.payloads.PostResponse;
 import com.springpractisewithmyself.blog.repositories.CategoryRepo;
 import com.springpractisewithmyself.blog.repositories.PostRepo;
 import com.springpractisewithmyself.blog.repositories.UserRepo;
@@ -77,29 +78,63 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDao> getAllPosts(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Post> pagePost = postRepo.findAll(pageable);
 
         List<Post> posts = pagePost.getContent();
         List<PostDao> postDaos =  posts.stream().map((post) -> modelMapper.map(post, PostDao.class)).collect(Collectors.toList());
-        return postDaos;
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(postDaos);
+        postResponse.setPageNumber(pagePost.getNumber());
+        postResponse.setPageSize(pagePost.getSize());
+        postResponse.setTotalElements(pagePost.getTotalElements());
+        postResponse.setTotalPages(pagePost.getTotalPages());
+        postResponse.setLastPage(pagePost.isLast());
+        return postResponse;
     }
 
     @Override
-    public List<PostDao> getPostsByUserId(Integer userId) {
+    public PostResponse getPostsByUserId(Integer userId, Integer pageNumber, Integer pageSize) {
         User foundedUser = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
-        List<Post> posts = postRepo.findAllByUser(foundedUser);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Post> pagePost = postRepo.findAllByUser(foundedUser, pageable);
+
+        List<Post> posts = pagePost.getContent();
         List<PostDao> postDaos =  posts.stream().map((post) -> modelMapper.map(post, PostDao.class)).collect(Collectors.toList());
-        return postDaos;
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(postDaos);
+        postResponse.setPageNumber(pagePost.getNumber());
+        postResponse.setPageSize(pagePost.getSize());
+        postResponse.setTotalElements(pagePost.getTotalElements());
+        postResponse.setTotalPages(pagePost.getTotalPages());
+        postResponse.setLastPage(pagePost.isLast());
+
+        return postResponse;
     }
 
     @Override
-    public List<PostDao> getPostsByCategoryId(Integer categoryId) {
+    public PostResponse getPostsByCategoryId(Integer categoryId, Integer pageNumber, Integer pageSize) {
         Category foundedCategory = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category", "id", categoryId));
-        List<Post> posts = postRepo.findAllByCategory(foundedCategory);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Post> pagePost = postRepo.findAllByCategory(foundedCategory, pageable);
+
+        List<Post> posts = pagePost.getContent();
         List<PostDao> postDaos =  posts.stream().map((post) -> modelMapper.map(post, PostDao.class)).collect(Collectors.toList());
-        return postDaos;
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(postDaos);
+        postResponse.setPageNumber(pagePost.getNumber());
+        postResponse.setPageSize(pagePost.getSize());
+        postResponse.setTotalElements(pagePost.getTotalElements());
+        postResponse.setTotalPages(pagePost.getTotalPages());
+        postResponse.setLastPage(pagePost.isLast());
+
+        return postResponse;
     }
 }

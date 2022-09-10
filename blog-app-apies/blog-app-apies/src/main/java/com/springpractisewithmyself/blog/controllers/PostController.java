@@ -2,6 +2,7 @@ package com.springpractisewithmyself.blog.controllers;
 
 import com.springpractisewithmyself.blog.payloads.ApiResponse;
 import com.springpractisewithmyself.blog.payloads.PostDao;
+import com.springpractisewithmyself.blog.payloads.PostResponse;
 import com.springpractisewithmyself.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,22 +34,26 @@ public class PostController {
     }
 
     @GetMapping("/user/{userId}/posts")
-    public ResponseEntity<List<PostDao>> getPostsByUser(@PathVariable Integer userId) {
-        List<PostDao> posts = postService.getPostsByUserId(userId);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId,
+                                                        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+        PostResponse postResponse = postService.getPostsByUserId(userId, pageNumber, pageSize);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     @GetMapping("/category/{categoryId}/posts")
-    public ResponseEntity<List<PostDao>> getPostsByCategory(@PathVariable Integer categoryId) {
-        List<PostDao> posts = postService.getPostsByCategoryId(categoryId);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getPostsByCategory(@PathVariable Integer categoryId,
+                                                            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+        PostResponse postResponse = postService.getPostsByCategoryId(categoryId, pageNumber, pageSize);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDao>> getPosts(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                                  @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
-        List<PostDao> posts = postService.getAllPosts(pageNumber, pageSize);
-        return new ResponseEntity<List<PostDao>>(posts, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getPosts(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                 @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+        PostResponse pagepost = postService.getAllPosts(pageNumber, pageSize);
+        return new ResponseEntity<PostResponse>(pagepost, HttpStatus.OK);
     }
 
     @GetMapping("/posts/{postId}")

@@ -1,6 +1,7 @@
 package com.springpractisewithmyself.blog.services;
 
 import com.springpractisewithmyself.blog.payloads.PostDao;
+import com.springpractisewithmyself.blog.payloads.PostResponse;
 
 import java.util.List;
 
@@ -14,9 +15,9 @@ public interface PostService {
 
     public PostDao getPostById(Integer postId);
 
-    public List<PostDao> getAllPosts(Integer pageNumber, Integer pageSize);
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
 
-    public List<PostDao> getPostsByUserId(Integer userId);
+    public PostResponse getPostsByUserId(Integer userId, Integer pageNumber, Integer pageSize);
 
-    public List<PostDao> getPostsByCategoryId(Integer categoryId);
+    public PostResponse getPostsByCategoryId(Integer categoryId, Integer pageNumber, Integer pageSize);
 }
