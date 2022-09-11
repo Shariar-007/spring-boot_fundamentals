@@ -18,5 +18,5 @@ public interface PostRepo extends JpaRepository<Post, Integer> {
 
     public Page<Post> findAllByUser(User user, Pageable pageable);
 
-//    public Page<Post> findAllByTitleContainingIgnoreCase(String title);
+    public List<Post> findByTitleContainingIgnoreCase(String title);
 }

@@ -158,4 +158,11 @@ public class PostServiceImpl implements PostService {
 
         return postResponse;
     }
+
+    @Override
+    public List<PostDao> searchPostByTitle(String title) {
+        List<Post> posts = postRepo.findByTitleContainingIgnoreCase(title);
+        List<PostDao> postDaos =  posts.stream().map((post) -> modelMapper.map(post, PostDao.class)).collect(Collectors.toList());
+        return postDaos;
+    }
 }

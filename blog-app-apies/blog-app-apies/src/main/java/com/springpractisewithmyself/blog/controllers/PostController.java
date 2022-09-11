@@ -73,4 +73,10 @@ public class PostController {
         postService.deletePost(postId);
         return new ResponseEntity<>(new ApiResponse("Post Deleted Successfully", true), HttpStatus.OK);
     }
+
+    @GetMapping("/posts/search")
+    public ResponseEntity<List<PostDao>> searchPostByTitle(@RequestParam(name = "title", required = true) String keyWords){
+        List<PostDao> posts = postService.searchPostByTitle(keyWords);
+        return new ResponseEntity<List<PostDao>>(posts, HttpStatus.OK);
+    }
 }

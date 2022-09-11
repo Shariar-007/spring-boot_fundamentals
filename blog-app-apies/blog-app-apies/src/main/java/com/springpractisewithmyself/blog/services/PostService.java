@@ -20,4 +20,7 @@ public interface PostService {
     public PostResponse getPostsByUserId(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String sortType);
 
     public PostResponse getPostsByCategoryId(Integer categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortType);
+
+    public List<PostDao> searchPostByTitle(String title);
+
 }
