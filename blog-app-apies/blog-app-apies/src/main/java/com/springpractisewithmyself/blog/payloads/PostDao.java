@@ -1,5 +1,4 @@
 package com.springpractisewithmyself.blog.payloads;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +6,8 @@ import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -25,4 +26,6 @@ public class PostDao {
     private Date createdDate;
     private UserDto user;
     private CategoryDao category;
+
+    private Set<CommentDao> comments = new HashSet<>();
 }
