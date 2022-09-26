@@ -2,6 +2,7 @@ package com.springpractisewithmyself.blog.payloads;
 
 
 import com.springpractisewithmyself.blog.entities.Comment;
+import com.springpractisewithmyself.blog.entities.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,4 +34,6 @@ public class UserDto {
 
     @NotNull
     private String about;
+
+    private Set<Role> roles = new HashSet<>();
 }

@@ -1,12 +1,16 @@
 package com.springpractisewithmyself.blog.services.implementation;
 
+import com.springpractisewithmyself.blog.config.AppConstants;
+import com.springpractisewithmyself.blog.entities.Role;
 import com.springpractisewithmyself.blog.entities.User;
 import com.springpractisewithmyself.blog.exceptions.ResourceNotFoundException;
 import com.springpractisewithmyself.blog.payloads.UserDto;
+import com.springpractisewithmyself.blog.repositories.RoleRepo;
 import com.springpractisewithmyself.blog.repositories.UserRepo;
 import com.springpractisewithmyself.blog.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepo roleRepo;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -57,6 +67,17 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Integer userId) {
         User foundedUser = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
         userRepo.delete(foundedUser);
+    }
+
+    @Override
+    public UserDto registerNewUser(UserDto userDto) {
+        User user = this.modelMapper.map(userDto, User.class);
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+//      roles set
+        Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+        user.getRoles().add(role);
+        User newUser = this.userRepo.save(user);
+        return this.modelMapper.map(newUser, UserDto.class);
     }
 
     public User dtoToUser(UserDto userDto){

@@ -4,7 +4,7 @@ import com.springpractisewithmyself.blog.payloads.UserDto;
 
 import java.util.List;
 
-public interface UserService {
+public interface  UserService {
 
     UserDto createUser(UserDto user);
 
@@ -15,4 +15,6 @@ public interface UserService {
     List<UserDto> getAllUsers();
 
     void deleteUser(Integer userId);
+
+    UserDto registerNewUser(UserDto user);
 }

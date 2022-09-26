@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -51,6 +50,4 @@ public class UserController {
         UserDto foundedUser = userService.getUserById(userId);
         return new ResponseEntity<>(foundedUser, HttpStatus.OK);
     }
-
-
 }
