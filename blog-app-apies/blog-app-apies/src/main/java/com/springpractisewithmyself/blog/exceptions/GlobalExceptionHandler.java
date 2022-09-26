@@ -3,6 +3,8 @@ package com.springpractisewithmyself.blog.exceptions;
 import com.springpractisewithmyself.blog.payloads.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,5 +51,33 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse(message, false);
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.METHOD_NOT_ALLOWED);
     }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ApiResponse> disabledExceptionHandler(DisabledException ex) {
+        String message = ex.getMessage();
+        ApiResponse apiResponse = new ApiResponse(message, false);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiResponse> apiExceptionHandler(ApiException ex) {
+        String message = ex.getMessage();
+        ApiResponse apiResponse = new ApiResponse(message, true);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
+//    @ExceptionHandler(BadCredentialsException.class)
+//    public ResponseEntity<ApiResponse> badCredentialsExceptionHandler(BadCredentialsException ex) {
+//        String message = ex.getMessage();
+//        ApiResponse apiResponse = new ApiResponse(message, false);
+//        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.METHOD_NOT_ALLOWED);
+//    }
+
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ApiResponse> allExceptionHandler(Exception ex) {
+//        String message = ex.getMessage();
+//        ApiResponse apiResponse = new ApiResponse(message, false);
+//        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.METHOD_NOT_ALLOWED);
+//    }
 
 }
