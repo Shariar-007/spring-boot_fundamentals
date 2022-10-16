@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ae14dab8-2180-4899-b0bb-725e33f04712" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_24_2022_11_20_PM_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_24_2022_11_20_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_24_2022_11_20_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_24_2022_11_20_PM__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blog-app-apies/blog-app-apies/src/main/java/com/springpractisewithmyself/blog/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../blog-app-apies/blog-app-apies/src/main/java/com/springpractisewithmyself/blog/config/SwaggerConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -92,6 +89,7 @@
       <workItem from="1658727771091" duration="2385000" />
       <workItem from="1659348178992" duration="79192000" />
       <workItem from="1659899019745" duration="9304000" />
+      <workItem from="1664102333385" duration="10711000" />
     </task>
     <servers />
   </component>
