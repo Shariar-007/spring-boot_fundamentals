@@ -33,7 +33,6 @@ public class UserController {
         Set<UserRole> userRoles = new HashSet<>();
         userRoles.add(userRole);
 
-
         User user1 = this.userService.createUser(user, userRoles);
         return user1;
     }
@@ -46,6 +45,11 @@ public class UserController {
     @GetMapping("{userName}")
     public User getUser(@PathVariable("userName") String username) throws Exception {
         return this.userService.getUser(username);
+    }
+
+    @GetMapping("/userId/{userId}")
+    public User getUserById(@PathVariable("userId") Long id) throws Exception {
+        return this.userService.getUserById(id);
     }
 
     @DeleteMapping("{userId}")

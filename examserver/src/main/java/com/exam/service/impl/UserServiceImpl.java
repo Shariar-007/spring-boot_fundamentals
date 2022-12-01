@@ -53,6 +53,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(Long userId) throws Exception {
+        return this.userRepository.findById(userId).orElseThrow(() -> new Exception("user not Found"));
+    }
+
+    @Override
     public void deleteUser(Long id) throws Exception {
         this.userRepository.deleteById(id);
     }
