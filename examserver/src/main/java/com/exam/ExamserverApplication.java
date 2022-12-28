@@ -18,6 +18,9 @@ import java.util.Set;
 @SpringBootApplication
 public class ExamserverApplication {
 
+	@Autowired
+	private UserService userService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ExamserverApplication.class, args);
 	}

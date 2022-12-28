@@ -1,5 +1,6 @@
 package com.exam.controller;
 
+import com.exam.helper.UserNotFoundException;
 import com.exam.models.Role;
 import com.exam.models.User;
 import com.exam.models.UserRole;
@@ -61,6 +62,11 @@ public class UserController {
     public User updateUser(@RequestBody User user, @PathVariable("userId") Long id) throws Exception {
         User updatedUser = this.userService.updateUser(user, id);
         return updatedUser;
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> exceptionHandler(UserNotFoundException ex) {
+        return ResponseEntity.ok(ex);
     }
 
 }

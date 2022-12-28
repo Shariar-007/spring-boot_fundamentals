@@ -31,6 +31,7 @@ public class User {
     private Boolean enable = true;
     private String profile;
 
+    // a user can have many roles
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
