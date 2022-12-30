@@ -1,13 +1,13 @@
 package com.exam.controller;
 
-import com.exam.helper.UserNotFoundException;
+import com.exam.helper.UserFoundException;
 import com.exam.models.Role;
 import com.exam.models.User;
 import com.exam.models.UserRole;
 import com.exam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -15,11 +15,14 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping
     public User createUser(@RequestBody User user) throws Exception {
@@ -33,6 +36,9 @@ public class UserController {
 
         Set<UserRole> userRoles = new HashSet<>();
         userRoles.add(userRole);
+
+        user.setProfile("default.png");
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
         User user1 = this.userService.createUser(user, userRoles);
         return user1;
@@ -64,8 +70,8 @@ public class UserController {
         return updatedUser;
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> exceptionHandler(UserNotFoundException ex) {
+    @ExceptionHandler(UserFoundException.class)
+    public ResponseEntity<?> exceptionHandler(UserFoundException ex) {
         return ResponseEntity.ok(ex);
     }
 

@@ -1,16 +1,15 @@
 package com.exam.service.impl;
 
+import com.exam.helper.UserFoundException;
 import com.exam.models.User;
 import com.exam.models.UserRole;
 import com.exam.repo.RoleRepository;
 import com.exam.repo.UserRepository;
 import com.exam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -25,11 +24,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user, Set<UserRole> userRoles) throws Exception {
 
-        User local = this.userRepository.findUserByUserName(user.getUserName());
+        User local = this.userRepository.findUserByUserName(user.getUsername());
 
         if (local != null) {
             System.out.println("User is already there !!");
-            throw new Exception("User already present");
+            throw new UserFoundException();
         } else {
             // user create
             for (UserRole ur : userRoles) {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,10 +17,13 @@ import java.util.Set;
 //import java.util.Set;
 
 @SpringBootApplication
-public class ExamserverApplication {
+public class ExamserverApplication{
 
 	@Autowired
 	private UserService userService;
+
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ExamserverApplication.class, args);
@@ -31,7 +35,7 @@ public class ExamserverApplication {
 //		user.setFirstName("Mohammad");
 //		user.setLastName("Shohag");
 //		user.setUserName("shohag007");
-//		user.setPassword("abc");
+//		user.setPassword(this.passwordEncoder.encode("abc123"));
 //		user.setEmail("shohag007@gmail.com");
 //		user.setProfile("default.png");
 //
