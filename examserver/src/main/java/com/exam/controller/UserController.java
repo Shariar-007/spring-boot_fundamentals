@@ -49,7 +49,7 @@ public class UserController {
         return this.userService.getAllUser();
     }
 
-    @GetMapping("{userName}")
+    @GetMapping("/{userName}")
     public User getUser(@PathVariable("userName") String username) throws Exception {
         return this.userService.getUser(username);
     }
