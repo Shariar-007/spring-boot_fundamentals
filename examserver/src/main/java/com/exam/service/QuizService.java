@@ -6,13 +6,13 @@ import java.util.Set;
 
 public interface QuizService {
 
-    public Quiz addQuiz(Quiz category);
+    public Quiz addQuiz(Quiz quiz);
 
-    public Quiz updateQuiz(Quiz category);
+    public Quiz updateQuiz(Quiz quiz);
 
     public Set<Quiz> getQuizzes();
 
     public Quiz getQuiz(Long quizId);
 
-    public void deleteQuiz(Long quizId);
+    public void deleteQuiz(Quiz quiz);
 }
