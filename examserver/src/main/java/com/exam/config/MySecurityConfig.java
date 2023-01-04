@@ -22,8 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MySecurityConfig extends WebSecurityConfigurerAdapter {
-    public static final String[] PUBLIC_URLS = {
-            "/login"};
+    public static final String[] PUBLIC_URLS = {"/login"};
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -64,10 +63,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeHttpRequests()
-                .antMatchers(PUBLIC_URLS)
-                .permitAll()
-                .antMatchers(HttpMethod.OPTIONS)
-                .permitAll()
+                .antMatchers(PUBLIC_URLS).permitAll()
+                .antMatchers(HttpMethod.POST, "/user").permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers().permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

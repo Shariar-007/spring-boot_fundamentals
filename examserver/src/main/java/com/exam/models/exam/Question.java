@@ -1,5 +1,7 @@
 package com.exam.models.exam;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,7 +28,12 @@ public class Question {
 
     private String option4;
 
+//    @JsonIgnore()
+//    @JsonProperty(value = "answer", access = JsonProperty.Access.WRITE_ONLY)
     private String answer;
+
+    @Transient
+    private String givenAnswer;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Quiz quiz;

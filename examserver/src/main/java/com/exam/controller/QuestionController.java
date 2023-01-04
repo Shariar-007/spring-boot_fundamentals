@@ -42,15 +42,18 @@ public class QuestionController {
         return this.questionService.updateQuestion(question);
     }
 
-//    get question under a quiz
+    //    get question under a quiz
     @GetMapping("/quiz/{quizId}")
     public ResponseEntity<?> getQuestionsOfQuiz(@PathVariable("quizId") Long id) {
         Quiz quiz = this.quizService.getQuiz(id);
         Set<Question> questions = quiz.getQuestions();
-        List list = new ArrayList<>(questions);
-        if(list.size() > Integer.parseInt(quiz.getNumberOfQuestion())){
+        List<Question> list = new ArrayList<>(questions);
+        if (list.size() > Integer.parseInt(quiz.getNumberOfQuestion())) {
             list = list.subList(0, Integer.parseInt(quiz.getNumberOfQuestion() + 1));
         }
+        list.forEach(q-> {
+            q.setAnswer("");
+        });
         Collections.shuffle(list);
         return ResponseEntity.ok(list);
     }
@@ -65,6 +68,29 @@ public class QuestionController {
     @DeleteMapping("/{questionId}")
     public void deleteQuestion(@PathVariable("questionId") Long id) {
         this.questionService.deleteQuestion(id);
+    }
+
+    // eval quiz
+    @PostMapping("/eval-quiz")
+    public ResponseEntity<?> evalQuiz(@RequestBody List<Question> questions) {
+        Double marksGot = 0.0;
+        Integer correctAnswers = 0;
+        Integer attempted = 0;
+
+        for (Question item : questions) {
+            Question question = this.questionService.get(item.getQuesId());
+            if (question.getAnswer().equals(item.getGivenAnswer())) {
+                correctAnswers++;
+                double markSingle =  Double.parseDouble(questions.get(0).getQuiz().getMaxMarks()) / questions.size();
+                marksGot += markSingle;
+            }
+
+            if (item.getGivenAnswer() != null) {
+                attempted++;
+            }
+        }
+        Map<String, Object> map = Map.of("marksGot", marksGot, "correctAnswers", correctAnswers, "attempted", attempted);
+        return ResponseEntity.ok(map);
     }
 
 }
